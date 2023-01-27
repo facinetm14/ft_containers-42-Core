@@ -14,20 +14,17 @@
 # define VECTOR_HPP
 # include <iostream>
 
-template<class T, typename U>
+template < class T, class Alloc = std::allocator<T> >
 class vector {
-    private:
-        T* _arr;
+
     public:
-        size_t _size;
-        size_t _capacity;
-        vector(int n): _arr(new T[n]), _size(n), _capacity(n) {};
-        ~vector(void){};
-        vector(vector )
-        size_t size() { return this->_size; };
-        size_t capacity() { return this->_capacity; };
-
-
+        typedef T			value_type;
+		typedef Alloc		allocator_type;
+        typedef T&			reference;
+		typedef const T&    const_reference;  	    
+		typedef T*			pointer;
+		typedef const T*	const_pointer;
+		typedef  
 };
 
 #endif
