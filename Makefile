@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/01/16 13:47:38 by fakouyat          #+#    #+#              #
-#    Updated: 2023/01/16 15:29:00 by fakouyat         ###   ########.fr        #
+#    Created: 2023/01/18 10:54:52 by fakouyat          #+#    #+#              #
+#    Updated: 2023/01/27 18:58:14 by fakouyat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,19 +18,18 @@ CXX = c++
 
 CFLAGS = -std=c++98 -Wall -Wextra -Werror
 
-OBJ = $(SRCS:.cpp=.o)
+OBJS = $(SRCS:.c=.o)
 
 all : $(NAME)
 
-$(NAME): $(OBJ)
-	$(CXX) $(CFLAGS) $(OBJ) -o $(NAME)
+$(NAME) : $(OBJS)
+	$(CXX) $(CFLAGS) -o $(NAME) $(OBJS)
 
-clean:
-	rm -rf $(OBJ)
+clean :
+	rm -rf $(OBJS)
 
-fclean: clean
+fclean : clean
 	rm -rf $(NAME)
 
-re: fclean all
+re : fclean clean all
 
-.PHONY: clean fclean all re
