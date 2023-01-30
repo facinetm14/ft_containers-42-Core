@@ -5,8 +5,9 @@
 #include <iostream>
 #include <vector>
 
-int main()
+int main(void)
 {
-    
+    std::vector<int> my_vector(5);
+	std::cout << my_vector.size() << std::endl;
     return (0);
 }

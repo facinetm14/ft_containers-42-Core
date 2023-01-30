@@ -1,35 +1,24 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/01/18 10:54:52 by fakouyat          #+#    #+#              #
-#    Updated: 2023/01/27 18:58:14 by fakouyat         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = ft_container
 
-SRCS = main.cpp
-
-CXX = c++
+CC = c++
 
 CFLAGS = -std=c++98 -Wall -Wextra -Werror
 
-OBJS = $(SRCS:.c=.o)
+SRCS = main.cpp 
+
+OBJ = $(SRCS:.cpp=.o)
 
 all : $(NAME)
 
-$(NAME) : $(OBJS)
-	$(CXX) $(CFLAGS) -o $(NAME) $(OBJS)
+$(NAME): $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-clean :
-	rm -rf $(OBJS)
+clean:
+	rm -rf $(OBJ)
 
-fclean : clean
+fclean: clean
 	rm -rf $(NAME)
 
-re : fclean clean all
+re: fclean all
 
+.PHONY: clean fclean all re

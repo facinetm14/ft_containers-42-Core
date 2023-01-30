@@ -14,17 +14,19 @@
 # define VECTOR_HPP
 # include <iostream>
 
-template < class T, class Alloc = std::allocator<T> >
-class vector {
+namespace ft {
+	template < class T, class Alloc = std::allocator<T> >
+	class vector {
 
-    public:
-        typedef T			value_type;
-		typedef Alloc		allocator_type;
-        typedef T&			reference;
-		typedef const T&    const_reference;  	    
-		typedef T*			pointer;
-		typedef const T*	const_pointer;
-		typedef  
-};
+		public:
+			typedef T			value_type;
+			typedef Alloc		allocator_type;
+			typedef T&			reference;
+			typedef const T&    const_reference;  	    
+			typedef T*			pointer;
+			typedef const T*	const_pointer;
+			typedef iterator
+	};
+}
 
 #endif
