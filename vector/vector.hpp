@@ -13,6 +13,7 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 # include <iostream>
+# include "Vector_iterator.hpp"
 
 namespace ft {
 	template < class T, class Alloc = std::allocator<T> >
@@ -25,7 +26,6 @@ namespace ft {
 			typedef const T&    const_reference;  	    
 			typedef T*			pointer;
 			typedef const T*	const_pointer;
-			typedef iterator
 	};
 }
 
