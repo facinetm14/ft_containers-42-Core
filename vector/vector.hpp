@@ -13,7 +13,7 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 # include <iostream>
-# include "Vector_iterator.hpp"
+# include "IteratorVector.hpp"
 
 namespace ft {
 	template < class T, class Alloc = std::allocator<T> >
