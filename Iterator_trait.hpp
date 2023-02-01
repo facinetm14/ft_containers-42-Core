@@ -6,12 +6,14 @@
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 13:38:40 by fakouyat          #+#    #+#             */
-/*   Updated: 2023/01/30 13:59:57 by fakouyat         ###   ########.fr       */
+/*   Updated: 2023/02/01 18:51:02 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ITERATOR_TRAIT_HPP
-# define ITERATROR_TRAIT_HPP
+# define ITERATOR_TRAIT_HPP
+# include <iostream>
+# include <cstddef>
 
 struct input_iterator_tag {};
 struct output_iterator_tag {};
