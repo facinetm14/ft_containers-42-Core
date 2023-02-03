@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Iterator_trait.hpp                                 :+:      :+:    :+:   */
+/*   iterator_trait.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 13:38:40 by fakouyat          #+#    #+#             */
-/*   Updated: 2023/02/01 18:51:02 by fakouyat         ###   ########.fr       */
+/*   Updated: 2023/02/02 23:12:15 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,31 +25,31 @@ struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
 namespace  ft
 {
-	template <class T>
+	template <typename T>
 	struct iterator_traits {
 		typedef typename T::value_type			value_type;
 		typedef typename T::difference_type		difference_type;
-		typedef typename T::iterator_category	iterator_category;
+		typedef typename T::iterator			iterator;
 		typedef typename T::pointer 			pointer;
 		typedef typename T::reference			reference;
 	};
 	
-	template <class T>
+	template <typename T>
 	struct iterator_traits<T*> {
 		typedef T 							value_type;
 		typedef ptrdiff_t 					difference_type;
-		typedef random_access_iterator_tag	iterator_category;
+		typedef random_access_iterator_tag	iterator;
 		typedef T* 							pointer;
 		typedef T& 							reference;
 	};
 
-	template <class T>
+	template <typename T>
 	struct iterator_traits<const T*> {
 		typedef T 							value_type;
 		typedef ptrdiff_t 					difference_type;
-		typedef random_access_iterator_tag	iterator_category;
-		typedef const T* 							pointer;
-		typedef const T& 							reference;
+		typedef random_access_iterator_tag	iterator;
+		typedef const T* 					pointer;
+		typedef const T& 					reference;
 	};
 }
 

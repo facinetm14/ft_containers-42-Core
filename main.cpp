@@ -5,9 +5,24 @@
 #include <iostream>
 #include <vector>
 
+typedef struct color_s 
+{
+    int r;
+    int g;
+    int b;
+
+    } color;
 int main(void)
 {
-    std::vector<int> my_vector(5);
-	std::cout << my_vector.size() << std::endl;
+    std::vector<color> my_vectorr;
+    color one;
+
+    one.b = 25;
+    my_vectorr.push_back(one);
+    std::cout << my_vectorr.begin()->b << std::endl;
+    one.b = 2;
+    my_vectorr.begin()->b = 10;
+    std::cout << my_vectorr.begin()->b << std::endl;
+	std::cout << my_vectorr.size() << std::endl;
     return (0);
 }
