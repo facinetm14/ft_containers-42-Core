@@ -6,7 +6,7 @@
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/01 18:32:41 by fakouyat          #+#    #+#             */
-/*   Updated: 2023/02/03 02:36:06 by fakouyat         ###   ########.fr       */
+/*   Updated: 2023/02/04 21:08:31 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ void	test_head(std::string to_check)
 
 void	test_foot(void)
 {
-	std::cout << "______________________________________________________________________________________________________________\n";
+	std::cout << "______________________________________________________________________________________________________________\n\n";
 }
 
 template<typename T>
 void	assert(T const & expected, T const & output)
 {
-	std::cout << " " << std::setw(30) <<"ft::IteratorVector<T> " << std::setw(10) << expected << " std::vector<T> " << std::setw(10) << output << std::setw(10) << "  ";
+	std::cout << " " << std::setw(30) <<"ft::IteratorVector<T> " << std::setw(10) << expected << "    std::vector<T> " << std::setw(10) << output << std::setw(10) << "  ";
 	if (expected == output)
 		std::cout << GREEN << "OK\n" << DEFAULT;
 	else
@@ -56,6 +56,7 @@ int main()
 	test_head("base()");
 	assert(*(it.base()), *(it2.base()));
 	test_foot();
+
 	/*-------------- testing pre-incrementation --------------*/
 	test_head("pre-incrementation");
 	while(it != numbers.end())
@@ -65,6 +66,7 @@ int main()
 		it2++;
 	}
 	test_foot();
+
 	/*-----------------testing pre-decrementation----------------*/
 	test_head("pre-decrementation");*
 	--it; --it2;
@@ -75,6 +77,7 @@ int main()
 		it2--;
 	}
 	test_foot();
+
 	/*-----------------testing post-incrementation----------------*/
 	test_head("post-incrementation");
 	++it; ++it2;
@@ -85,6 +88,7 @@ int main()
 		++it2;
 	}
 	test_foot();
+
 	/*-----------------testing post-decrementation----------------*/
 	test_head("post-decrementation");
 	--it; --it2;
@@ -95,6 +99,7 @@ int main()
 		--it2;
 	}
 	test_foot();
+	
 	/*-----------------testing operator += ----------------*/
 	test_head("operator +=");
 	++it; ++it2;
@@ -105,6 +110,7 @@ int main()
 		it2 += 1;
 	}
 	test_foot();
+	
 	/*-----------------testing operator -= ----------------*/
 	--it; --it2;
 	test_head("operator -=");
@@ -115,6 +121,7 @@ int main()
 		--it2;
 	}
 	test_foot();
+	
 	/*-----------------testing operator -> ----------------*/
 	{
 		test_head("operator ->");
@@ -142,6 +149,7 @@ int main()
 		}
 		test_foot();
 	}
+	
 	/*-----------------testing dereference operator *it ----------------*/
 	it += 2; ++it2;
 	test_head("operator *it = n");
@@ -154,12 +162,43 @@ int main()
 	*it -= 20;
 	*it2 -= 20;
 	assert(*it, *it2);
-	*it++;
-	*it2++;
-	assert(*it, *it2);
-	// *it--;
-	// *it2--;
-	// assert(*it, *it2);
 	test_foot();
+	
+	/*-----------------testing operator comparaison ----------------*/
+	{
+		std::vector<int> v1;
+		v1.push_back(2);
+		v1.push_back(12);
+		v1.push_back(21);
+		v1.push_back(123);
+		v1.push_back(9);
+		std::vector<int>::iterator it1_std = v1.begin();
+		std::vector<int>::iterator it2_std = v1.begin() + 2;
+		ft::IteratorVector<std::vector<int> > it1_ft(&v1[0]);
+		ft::IteratorVector<std::vector<int> > it2_ft(&v1[2]);
+		test_head("operator comparaison it + 0 and it + 2 ");
+		assert(((it1_std == it2_std) ? 1 : 0), ((it1_ft == it2_ft) ? 1 : 0));
+		assert(((it1_std <= it2_std) ? 1 : 0), ((it1_ft <= it2_ft) ? 1 : 0));
+		assert(((it1_std >= it2_std) ? 1 : 0), ((it1_ft >= it2_ft) ? 1 : 0));
+		assert(((it1_std > it2_std) ? 1 : 0), ((it1_ft > it2_ft) ? 1 : 0));
+		assert(((it1_std < it2_std) ? 1 : 0), ((it1_ft < it2_ft) ? 1 : 0));
+		test_foot();
+		test_head("operator +");
+		assert((it2_std - it1_std), (it2_ft- it1_ft));
+		assert(*(it1_std + 2), *(it1_ft + 2));
+		assert(*(it2_std - 2), *(it2_ft - 2));
+		assert(*(2 + it2_std), *(2 + it2_ft));
+		test_foot();
+	
+		const std::vector<int>::iterator const_it1_std = it1_std;
+		const std::vector<int>::iterator const_it2_std = it2_std;
+		const ft::IteratorVector<std::vector<int> > const_it1_ft = it1_ft;
+		const ft::IteratorVector<std::vector<int> > const_it2_ft = it2_ft;
+		test_head("operator comparaison it + 0 and it + 2 for const");
+		assert(((const_it1_std == const_it2_std) ? 1 : 0), ((const_it1_ft == const_it2_ft) ? 1 : 0));
+		assert((const_it2_std - const_it1_std), (const_it2_ft - const_it1_ft));
+		test_foot();
+	
+	}
 	return (0);
 }
