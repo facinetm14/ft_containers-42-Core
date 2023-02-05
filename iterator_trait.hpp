@@ -6,7 +6,7 @@
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/30 13:38:40 by fakouyat          #+#    #+#             */
-/*   Updated: 2023/02/02 23:12:15 by fakouyat         ###   ########.fr       */
+/*   Updated: 2023/02/04 23:45:36 by fakouyat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ struct random_access_iterator_tag : public bidirectional_iterator_tag {};
 
 
 
-namespace  ft
-{
+namespace  ft {
 	template <typename T>
 	struct iterator_traits {
 		typedef typename T::value_type			value_type;

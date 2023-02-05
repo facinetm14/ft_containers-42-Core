@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   IteratorVector.hpp                                 :+:      :+:    :+:   */
+/*   random_access_iterator                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fakouyat <fakouyat@student.42wolfsburg.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -17,7 +17,7 @@
 namespace ft {
 	
 	template <typename T>
-	class IteratorVector {
+	class random_access_iterator {
 		public:
 			typedef T 													iterator_type;
 			typedef typename ft::iterator_traits<T>::value_type			value_type;
@@ -27,13 +27,13 @@ namespace ft {
 			typedef typename ft::iterator_traits<T>::reference			reference;
 
 			// constructor & destructors
-			IteratorVector(void): _ptr(NULL) {}
+			random_access_iterator(void): _ptr(NULL) {}
 			
-			IteratorVector(pointer ptr) { this->_ptr = ptr; }
+			random_access_iterator(pointer ptr): _ptr(ptr) {}
 			
-			IteratorVector(const IteratorVector & it) { this->_ptr = it._ptr ; }
+			random_access_iterator(const random_access_iterator & it): _ptr(it._ptr) {}
 			
-			IteratorVector& operator=(const IteratorVector & it) 
+			random_access_iterator& operator=(const random_access_iterator & it) 
 			{  
 				if (this == &it)
 					return (*this);
@@ -41,62 +41,62 @@ namespace ft {
 				return (*this);	
 			}
 
-			virtual ~IteratorVector(void) {}
+			virtual ~random_access_iterator(void) {}
 			
 			// comparaison operators
-			bool operator==(const IteratorVector & it2) const { return this->_ptr == it2._ptr; }
+			bool operator==(const random_access_iterator & it2) const { return this->_ptr == it2._ptr; }
 			
-			bool operator!=(const IteratorVector & it2) const { return this->_ptr != it2._ptr; }
+			bool operator!=(const random_access_iterator & it2) const { return this->_ptr != it2._ptr; }
 			
-			bool operator<=(const IteratorVector & it2) const { return this->_ptr <= it2._ptr; }
+			bool operator<=(const random_access_iterator & it2) const { return this->_ptr <= it2._ptr; }
 			
-			bool operator>=(const IteratorVector & it2) const { return this->_ptr >= it2._ptr; }
+			bool operator>=(const random_access_iterator & it2) const { return this->_ptr >= it2._ptr; }
 			
-			bool operator<(const IteratorVector & it2) const { return this->_ptr < it2._ptr; }
+			bool operator<(const random_access_iterator & it2) const { return this->_ptr < it2._ptr; }
 			
-			bool operator>(const IteratorVector & it2) const { return this->_ptr >= it2._ptr; }
+			bool operator>(const random_access_iterator & it2) const { return this->_ptr >= it2._ptr; }
 
 			// reference and dereference
-			reference operator*(void) { return *(this->_ptr); }
+			reference operator*(void) const { return *(this->_ptr); }
 			
 			pointer operator->(void) { return &(this->operator*()); }
 			
 			// incrementation and decrement (pre/post)
-			IteratorVector& operator++(void) 
+			random_access_iterator& operator++(void) 
 			{
 				_ptr++;
 				return (*this);
 			}
 			
-			IteratorVector operator++(int)
+			random_access_iterator operator++(int)
 			{
-				IteratorVector tmp(*this);
+				random_access_iterator tmp(*this);
 				_ptr++;
 				return (tmp);
 			}
 
-			IteratorVector& operator--(void) 
+			random_access_iterator& operator--(void) 
 			{
 				_ptr--;
 				return (*this);
 			}
 			
-			IteratorVector operator--(int)
+			random_access_iterator operator--(int)
 			{
-				IteratorVector tmp(*this);
+				random_access_iterator tmp(*this);
 				_ptr--;
 				return (tmp);
 			}
 
-			IteratorVector operator+(difference_type n) const
+			random_access_iterator operator+(difference_type n) const
 			{
-				IteratorVector tmp(_ptr + n);
+				random_access_iterator tmp(_ptr + n);
 				return tmp;
 			}
 			
-			IteratorVector operator-(difference_type n) const
+			random_access_iterator operator-(difference_type n) const
 			{
-				IteratorVector tmp(_ptr - n);
+				random_access_iterator tmp(_ptr - n);
 				return tmp;
 			}
 
@@ -105,13 +105,13 @@ namespace ft {
 				return *(_ptr + n);
 			}
 			
-			IteratorVector& operator+=(difference_type n)
+			random_access_iterator& operator+=(difference_type n)
 			{
 				_ptr += n;
 				return (*this);
 			}
 			
-			IteratorVector& operator-=(difference_type n)
+			random_access_iterator& operator-=(difference_type n)
 			{
 				_ptr -= n;
 				return (*this);
@@ -119,28 +119,30 @@ namespace ft {
 			
 			pointer base() const { return _ptr; }
 			
-		private:
+		protected:
 			pointer _ptr;
 	};
 }
 
+// non members functions (relationals)
+
 template<typename T>
-typename ft::IteratorVector<T>::difference_type
+typename ft::random_access_iterator<T>::difference_type
 operator-( 
-		   	const typename ft::IteratorVector<T> & it,
-		   	const typename ft::IteratorVector<T> & it2
+		   	const typename ft::random_access_iterator<T> & it,
+		   	const typename ft::random_access_iterator<T> & it2
 		 )
 {
 	return (it.base() - it2.base());
 }
 template<typename T>
-typename ft::IteratorVector<T>
+typename ft::random_access_iterator<T>
 operator+( 
-			const typename ft::IteratorVector<T>::difference_type & n,
-		   	const typename ft::IteratorVector<T> & it
+			const typename ft::random_access_iterator<T>::difference_type & n,
+		   	const typename ft::random_access_iterator<T> & it
 		 )
 {
-	ft::IteratorVector<T> new_it(it.base() + n);
+	ft::random_access_iterator<T> new_it(it.base() + n);
 	return (new_it);
 }
 

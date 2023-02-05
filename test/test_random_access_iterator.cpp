@@ -162,6 +162,7 @@ int main()
 		assert(((it1_std < it2_std) ? 1 : 0), ((it1_ft < it2_ft) ? 1 : 0));
 		test_foot();
 	
+		//------------------testing operator +/- n ---------------------------
 		test_head("operator +");
 		assert((it2_std - it1_std), (it2_ft- it1_ft));
 		assert(*(it1_std + 2), *(it1_ft + 2));
