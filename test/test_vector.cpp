@@ -10,20 +10,109 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <chrono>
 #include "utils.hpp"
 #include <vector>
 #include "../vector/vector.hpp"
 
 int     main()
 {
-    // ---------------- testing constructors ------------------------
+    // ---------------- testing constructors & iterators ------------------------
     {
         test_head("constructors");
-        std::vector<int> v;
-        ft::vector<int> v1;
-        //assert(*(v.begin()), *(v1.begin()));
-        //v1.begin();
+        {
+            std::vector<int> v;
+            ft::vector<int> v1;
+            assert(v.size(), v1.size());
+        }
+        {
+            auto start = std::chrono::steady_clock::now();
+            std::vector<int> v(10000);
+            auto end = std::chrono::steady_clock::now();
+            auto std_benchmark = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+            auto start1 = std::chrono::steady_clock::now();
+            ft::vector<int> v1(10000);
+            auto end1 = std::chrono::steady_clock::now();
+            auto ft_benchmark = std::chrono::duration_cast<std::chrono::nanoseconds>(end1 - start1).count();
+            assert(v.size(), v1.size());
+            test_head("benchmark st vs ft [ms]");
+            assert_performance(std_benchmark, ft_benchmark);
+        }
+
+        {
+            std::vector<int> v(5);
+            ft::vector<int> v1(5);
+
+            ft::vector<int>::reverse_iterator re_it1(v1.rbegin());
+            std::vector<int>::reverse_iterator re_it(v.rbegin());
+            std::vector<int>::reverse_iterator re_end(v.rend());
+
+            ft::vector<int>::iterator it1(v1.begin());
+            std::vector<int>::iterator it(v.begin());
+
+            v1[0] = 2,  v[0] = 2;
+            v1[1] = 20; v[1] = 20;
+            v1[2] = 5;  v[2] = 5;
+            v1[3] = 8;  v[3] = 8;
+            v1[4] = 10; v[4] = 10;
+            
+            // iteration
+            test_head("iteration std::vector vs ft::vector");
+            while (it1 != v1.end())
+            {
+                assert(*it, *it1);
+                it++;
+                it1++;
+            }
+
+            // reverse iteration
+            test_head("reverse_iteration std::vector vs ft::vector");
+            while (re_it != re_end)
+            {
+                assert(*re_it, *re_it1);
+                re_it++;
+                re_it1++;
+            }
+
+            // iteration benchmark
+            auto start = std::chrono::steady_clock::now();
+            std::vector<int>::iterator iter = v.begin();
+            while (iter != v.end())
+                iter++;
+            auto end = std::chrono::steady_clock::now();
+            auto std_benchmark = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+            auto start1 = std::chrono::steady_clock::now();
+            ft::vector<int>::iterator iter_ft = v1.begin();
+            while (iter_ft != v1.end())
+                iter_ft++;
+            auto end1 = std::chrono::steady_clock::now();
+            auto ft_benchmark = std::chrono::duration_cast<std::chrono::nanoseconds>(end1 - start1).count();
+            test_head("benchmark st vs ft [ms]");
+            assert_performance(std_benchmark, ft_benchmark);
+            test_foot();
+
+            //--------------------elements acces methods -----------------------------
+            std::cout << "Elements access methods\n";
+            test_head("front()");
+            assert(v.front(), v1.front());
+            test_head("back()");
+            assert(v.back(), v1.back());
+            test_head("at(n) n = 3, 1, -1");
+            assert(v.at(3), v1.at(3));
+            assert(v.at(1), v1.at(1));
+            //assert(v.at(-1), v.at(-1));
+            //assert(v.at(v.size()), v1.at(v1.size()));
+            test_foot();
+
+            //------------------testing capacity methods ----------------------------------------
+            std::cout << "Capacity methods\n";
+            test_head("!empty()");
+            assert(!v.empty() ? 1 : 0 , !v1.empty() ? 1 : 0);
+            test_head("max_size()");
+            assert(v.max_size(), v1.max_size());
+        }
     }
+
 
     return (0);
 }

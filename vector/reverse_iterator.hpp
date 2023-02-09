@@ -12,29 +12,28 @@
 
 #ifndef REVERSE_ITERATOR_HPP
 # define REVERSE_ITERATOR_HPP
-# include "../iterator_trait.hpp"
-# include "../vector/random_access_iterator.hpp"
+# include "../iterator_traits.hpp"
 
 namespace ft {
     template<typename T>
     class reverse_iterator {
 
         public:
-			typedef T 													iterator_type;
-			typedef typename ft::iterator_traits<T>::value_type			value_type;
-			typedef typename ft::iterator_traits<T>::difference_type	difference_type;
-			typedef typename ft::iterator_traits<T>::iterator	  		iterator;
-			typedef typename ft::iterator_traits<T>::pointer			pointer;
-			typedef typename ft::iterator_traits<T>::reference			reference;
+			typedef T 												    iterator_type;
+			typedef typename ft::iterator_traits<T>::value_type		    value_type;
+			typedef typename ft::iterator_traits<T>::difference_type    difference_type;
+            typedef typename ft::iterator_traits<T>::iterator_category  iterator_category;
+			typedef typename ft::iterator_traits<T>::pointer		    pointer;
+			typedef typename ft::iterator_traits<T>::reference  		reference;
 
             // constructors & destructor
             reverse_iterator(): _base() {}
         
-            explicit reverse_iterator(iterator_type it_base): _base(it_base) {}
+            reverse_iterator(iterator_type it_base): _base(it_base - 1) {}
             
-            reverse_iterator(const reverse_iterator & it): _base(it._base) {}
-
-            reverse_iterator & operator=(const reverse_iterator & it)
+            reverse_iterator(const reverse_iterator<T> & it): _base(it._base) {}
+            
+            reverse_iterator & operator=(const reverse_iterator<T> & it)
             {
                 if (this == &it)
 					return (*this);
@@ -47,9 +46,15 @@ namespace ft {
             // arithmetic operators
             reverse_iterator operator++(int) 
             {
-                reverse_iterator it(*this);
+                reverse_iterator it = *this;
                 _base--;
                 return it;
+            }
+
+            reverse_iterator & operator++() 
+            {
+                _base--;
+                return *(this);
             }
 
             reverse_iterator operator--(int) 
@@ -57,6 +62,12 @@ namespace ft {
                 reverse_iterator it(*this);
                 _base++;
                 return it;
+            }
+
+            reverse_iterator & operator--() 
+            {
+                _base++;
+                return *(this);
             }
             
             reverse_iterator operator+=(difference_type n)

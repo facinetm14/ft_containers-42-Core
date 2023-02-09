@@ -12,22 +12,22 @@
 
 #ifndef ITERATOR_VECTOR_HPP
 # define ITERATOR_VECTOR_HPP
-# include "../iterator_trait.hpp"
+# include "../iterator_traits.hpp"
 
 namespace ft {
 	
 	template <typename T>
-	class random_access_iterator {
+	class random_access_iterator : ft::Iterator<ft::random_access_iterator_tag, T> {
+
 		public:
-			typedef T 													iterator_type;
-			typedef typename ft::iterator_traits<T>::value_type			value_type;
-			typedef typename ft::iterator_traits<T>::difference_type	difference_type;
-			typedef typename ft::iterator_traits<T>::iterator	  		iterator;
-			typedef typename ft::iterator_traits<T>::pointer			pointer;
-			typedef typename ft::iterator_traits<T>::reference			reference;
+			typedef typename ft::Iterator<ft::random_access_iterator_tag, T>::value_type		value_type;
+			typedef typename ft::Iterator<ft::random_access_iterator_tag, T>::difference_type	difference_type;
+			typedef typename ft::Iterator<ft::random_access_iterator_tag, T>::iterator_category	iterator_category;
+			typedef typename ft::Iterator<ft::random_access_iterator_tag, T>::pointer			pointer;
+			typedef typename ft::Iterator<ft::random_access_iterator_tag, T>::reference			reference;
 
 			// constructor & destructors
-			random_access_iterator(void): _ptr(NULL) {}
+			random_access_iterator(void): _ptr() {}
 			
 			random_access_iterator(pointer ptr): _ptr(ptr) {}
 			
@@ -58,8 +58,10 @@ namespace ft {
 
 			// reference and dereference
 			reference operator*(void) const { return *(this->_ptr); }
+			//reference operator*(void) const { return *(this->_ptr); }
 			
 			pointer operator->(void) { return &(this->operator*()); }
+			//const pointer operator->(void) const { return &(this->operator*()); }
 			
 			// incrementation and decrement (pre/post)
 			random_access_iterator& operator++(void) 
@@ -100,10 +102,7 @@ namespace ft {
 				return tmp;
 			}
 
-			reference operator[](difference_type n) const
-			{
-				return *(_ptr + n);
-			}
+			reference operator[](difference_type n) { return *(_ptr + n); }
 			
 			random_access_iterator& operator+=(difference_type n)
 			{

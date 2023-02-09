@@ -24,11 +24,21 @@ void	test_foot(void);
 template<typename T>
 void	assert(T const & expected, T const & output)
 {
-	std::cout << " " << std::setw(30) <<"std::it<T> " << std::setw(10) << expected << "    ft::it<T> " << std::setw(10) << output << std::setw(10) << "  ";
+	std::cout << " " << std::setw(30) <<"std::" << std::setw(10) << expected << "    ft::" << std::setw(10) << output << std::setw(10) << "  ";
 	if (expected == output)
 		std::cout << GREEN << "OK\n" << DEFAULT;
 	else
 		std::cout << RED << "KO\n" << DEFAULT;	
+}
+
+template<typename T>
+void	assert_performance(T const & expected, T const & output)
+{
+    std::cout << " " << std::setw(30) <<"std::" << std::setw(10) << expected << "    ft::" << std::setw(10) << output << std::setw(10) << "  ";
+	if (expected < output * 20)
+		std::cout << GREEN << "OK\n" << DEFAULT;
+	else
+		std::cout << RED << "KO\n" << DEFAULT;
 }
 
 #endif
