@@ -54,11 +54,26 @@ namespace ft {
 				}
 			}
 
-			/*!!!!!!!!!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!!!
-			*  range constructor with Input iterator
-			* template <class InputIterator>
-			  vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
-			*/
+			template <class InputIterator>
+			vector (InputIterator first, InputIterator last,
+					const allocator_type& alloc = allocator_type())
+			{
+				if (first == last)
+					return ;
+				_size = last - first;
+				_capacity = _size;
+				_ptr = _alloc.allocate(_capacity);
+				_begin = _ptr;
+				size_t i = 0, j = _size;
+				while (i < j)
+				{
+					_alloc.construct(_ptr + i, *first);
+					_alloc.construct(_ptr + j - 1, *(last - 1));
+					i++; first++;
+					j--; last--;
+				}
+				
+			}
 
 			vector(const vector & v):
 				_size(v._size), _capacity(v._capacity), _alloc(v._alloc), 
@@ -112,6 +127,41 @@ namespace ft {
 
 			bool empty() const { return _size == 0; }
 
+			void resize (size_type n, value_type val = value_type())
+			{
+				if (n < _size)
+				{
+					_alloc.destroy(_ptr + n);
+					_size = n;
+					return ;
+				}
+				if (n == _size)
+					return;
+				if (n > _capacity)
+					this->re_allocate(n, val, 2 * _capacity);
+				_size = n;
+			}
+
+			void	reserve(size_type n) 
+			{
+				if (n > this->max_size())
+					throw std::exception();
+				if (n > _capacity)
+					this->re_allocate(n, value_type(), n);
+			}
+
+			// modifiers
+			template <class InputIterator>
+			void assign (InputIterator first, InputIterator last) 
+			{
+
+			}
+
+			void	assign(size_type, const value_type & val)
+			{
+
+			}
+			
 			// allocator
 			allocator_type get_allocator() const { return _alloc; }
 
@@ -121,6 +171,28 @@ namespace ft {
 				pointer			_begin;
 				allocator_type	_alloc;
 				pointer 		_ptr;
+
+			private:
+
+				//just a helper for rellocating and updating.
+				void	re_allocate(size_type n, value_type val, size_type new_capacity)
+				{
+					_capacity = new_capacity;
+					pointer tmp = _ptr;
+					_ptr = _alloc.allocate(_capacity);
+					size_type i = 0, j = n;
+					while (i < n)
+					{
+						if (i < _size)
+							*(_ptr + i) = *(tmp + i);
+						if (j > _size)
+							_alloc.construct(_ptr + j -1, val);
+						i++;
+						j--;
+					}
+					_alloc.destroy(tmp);
+					_alloc.deallocate(tmp, _size);
+				}
 	};
 }
 

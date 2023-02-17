@@ -4,7 +4,9 @@ CC = c++
 
 CFLAGS = -std=c++98 -Wall -Wextra -Werror
 
-SRCS = main2.cpp 
+#SRCS = test_random_access_iterator.cpp utils.cpp
+#SRCS = test_reverse_iterator.cpp utils.cpp
+SRCS = main2.cpp test/utils.cpp
 
 OBJ = $(SRCS:.cpp=.o)
 

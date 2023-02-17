@@ -1,12 +1,12 @@
-#define RED "\033[31;1m"
-#define GREEN "\033[32;1m"
-#define DEFAULT "\033[0m"
+#include "test/header.hpp"
+#include <string>
 
-#include <iostream>
-#include <vector>
 
 int main(void)
 {
-  // test_vector();
+    TestVector<int> test1(5, 0, 39, 8, 31, 3, 4);
+    test1.run();
+    TestVector<std::string> test2(3, "", "Bonjour", "Bien", "COOL");
+    test2.run();
     return (0);
 }
