@@ -81,12 +81,126 @@ class TestVector {
             test_foot();
         }
 
+        /*---------------------------capacity----------------------*/
+        void    size_and_capacity() 
+        {
+            test_head("size()");
+            assert(v1.size(), v2.size());
+            test_head("capacity()");
+            assert(v1.capacity(), v2.capacity());
+        }
+        /*---------------------------------------------------------*/
+        
+        /*----------------Modifiers--------------------------------*/
+        // push_back
+        void push_back() 
+        {
+            test_head("********push_back()******");
+            v1.push_back(*(this->v1.begin()));
+            v2.push_back(*(this->v2.begin()));
+            this->size_and_capacity();
+            this->iteration();
+            v1.push_back(*(this->v1.end() - 1)); 
+            v2.push_back(*(this->v2.end() - 1));
+            this->iteration();
+            this->size_and_capacity();
+        }
+
+        // pop_back()
+        void    pop_back()
+        {
+            test_head("***pop_back()***");
+            std::cout << "BEFORE\n";
+            this->iteration();
+            v1.pop_back();
+            v2.pop_back();
+            std::cout << "AFTER\n";
+            this->iteration();
+            this->size_and_capacity();
+            std::cout << "BEFORE\n";
+            this->iteration();
+            this->v1.pop_back();
+            this->v2.pop_back();
+            std::cout << "AFTER\n";
+            this->iteration();
+            this->size_and_capacity();
+        }
+    
+        template <typename V>
+        void    insert(V val)
+        {
+            std::cout << "BEFORE\n";
+            this->iteration();
+            this->size_and_capacity();
+            std::cout << "AFTER\n";
+            v1.insert(v1.begin(), val);
+            v2.insert(v2.begin(), val);
+            this->iteration();
+            this->size_and_capacity();
+            v1.insert(v1.end(), val);
+            v2.insert(v2.end(), val);
+            this->iteration();
+            this->size_and_capacity();
+            v1.insert(v1.end() - (v1.size() / 2), val);
+            v2.insert(v2.end() - (v2.size() / 2), val);
+            // this->iteration();
+            // this->size_and_capacity();
+        }
+        template <typename V>
+        void    insert2(V val)
+        {
+            std::cout << "BEFORE\n";
+            this->iteration();
+            this->size_and_capacity();
+            std::cout << "AFTER\n";
+            v1.insert(v1.begin(), 0, val);
+            v2.insert(v2.begin(), 0, val);
+            this->iteration();
+            this->size_and_capacity();
+            v1.insert(v1.end(), 3, val);
+            v2.insert(v2.end(), 3, val);
+            this->iteration();
+            this->size_and_capacity();
+            v1.insert(v1.end() - (v1.size() / 2), 8, val);
+            v2.insert(v2.end() - (v2.size() / 2), 8, val);
+            this->iteration();
+            this->size_and_capacity();
+        }
+
+        template <typename InputIterator>
+        void    insert3(InputIterator val)
+        {
+            std::cout << "BEFORE\n";
+            this->iteration();
+            this->size_and_capacity();
+            std::cout << "AFTER\n";
+            v1.insert(v1.begin(), val.begin(), val.end());
+            v2.insert(v2.begin(), val.begin(), val.end());
+            this->iteration();
+            this->size_and_capacity();
+            v1.insert(v1.end(), val.begin(), val.end());
+            v2.insert(v2.end(), val.begin(), val.end());
+            this->iteration();
+            this->size_and_capacity();
+            v1.insert(v1.end() - (v1.size() / 2), val.begin(), val.end());
+            v2.insert(v2.end() - (v2.size() / 2), val.begin(), val.end());
+            this->iteration();
+            this->size_and_capacity();
+        }
+
+        /*---------------------------------------------------------*/
+
         // trigger tests
-        void    run()
+        template <typename ARGS>
+        void    run(ARGS& val)
         {
             std::cout << "Test start...\n";
             this->constructor();
             this->iteration();
+            this->push_back();
+            this->pop_back();
+            //this->insert2(val[1]);
+            //this->insert3(val);
             std::cout << "***************************************************************************************************************\n\n";
         }
 
