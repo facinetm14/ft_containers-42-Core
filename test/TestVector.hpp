@@ -22,8 +22,6 @@ class TestVector {
             std::va_list args;
             U curr;
             va_start(args, type);
-            (void)type;
-
             for(int i = 0; i < nb; i++)
             {
                 curr = va_arg(args, U);
@@ -33,6 +31,7 @@ class TestVector {
             va_end(args);
         }
 
+        ~TestVector() { }
         // construction size
         void constructor() 
         {
@@ -137,14 +136,17 @@ class TestVector {
             v2.insert(v2.begin(), val);
             this->iteration();
             this->size_and_capacity();
-            v1.insert(v1.end(), val);
-            v2.insert(v2.end(), val);
+            // v1.insert(v1.end(), val);
+            // v2.insert(v2.end(), val);
             this->iteration();
             this->size_and_capacity();
-            v1.insert(v1.end() - (v1.size() / 2), val);
-            v2.insert(v2.end() - (v2.size() / 2), val);
-            // this->iteration();
-            // this->size_and_capacity();
+            // std::cout << "Test : " << *(v2.end() - (v2.size() / 2 - 1))  << "\n";
+            // std::cout << "Test2 : " << *(v1.end() - (v1.size() / 2 - 1))  << "\n";
+            // std::cout << "Test21 : " << (v2.end() - (v2.size() / 2 - 1)) - v2.begin() << "\n";
+            // std::cout << "Test22 : " << (v1.end() - (v1.size() / 2 - 1)) -v1.begin()  << "\n";
+            v1.insert(v1.begin() - (v1.size() / 2 - 1), val);
+            v2.insert(v2.begin() - (v2.size() / 2 - 1), val);
+            this->iteration();
         }
         template <typename V>
         void    insert2(V val)

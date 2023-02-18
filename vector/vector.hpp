@@ -43,8 +43,7 @@ namespace ft {
 					_size(n), _capacity(n), _alloc(alloc), _ptr(NULL)
 			{
 				_ptr = _alloc.allocate(_capacity);
-				_begin = _ptr;
-				size_t i = 0, j = n;	
+				size_t i = 0, j = _capacity;	
 				while (i < j)
 				{
 					_alloc.construct(_ptr + i, val);
@@ -52,6 +51,7 @@ namespace ft {
 					i++;
 					j--;
 				}
+				_begin = _ptr;
 			}
 
 			template <class InputIterator>
@@ -79,18 +79,40 @@ namespace ft {
 				_size(v._size), _capacity(v._capacity), _alloc(v._alloc), 
 				_ptr(_alloc.allocate(_capacity))
 			{
-				size_t i = 0, j = _capacity;	
+				size_type i = 0, j = _capacity;	
 				while (i < j)
 				{
-					_alloc.construct(_ptr + i, *(v._pt + i));
-					_alloc.construct(_ptr + j - 1, *(v._pt + j - 1));
+					_alloc.construct(_ptr + i, *(v._ptr + i));
+					_alloc.construct(_ptr + j - 1, *(v._ptr + j - 1));
 					i++;
 					j--;
 				}
 				_begin = _ptr;
 			}
+			vector&	operator=(const vector& x)
+			{
+				_size = x._size;
+				_capacity = x._capacity;
+				_ptr = _alloc.allocate(_capacity);
+				size_type i = 0, j = _capacity;	
+				while (i < j)
+				{
+					_alloc.construct(_ptr + i, *(x._ptr + i));
+					_alloc.construct(_ptr + j - 1, *(x._ptr + j - 1));
+					i++;
+					j--;
+				}
+				_begin = _ptr;
+				return (*this);
+			}
 
-			~vector() {}
+			~vector() 
+			{
+				if (_capacity <= 0)
+					return;
+				this->clear(_ptr, _capacity);
+				_alloc.deallocate(_ptr, _capacity);
+			}
 
 			//iterators
 			iterator		begin() { return iterator(_begin); }
@@ -127,19 +149,23 @@ namespace ft {
 
 			bool empty() const { return _size == 0; }
 
-			void resize (size_type n, value_type val = value_type())
+			void resize(size_type n, value_type val = value_type())
 			{
 				if (n < _size)
 				{
-					_alloc.destroy(_ptr + n);
+					for (auto i = n; i < _size; i++)
+					{
+						_alloc.destroy(_ptr + i);
+					}
 					_size = n;
 					return ;
 				}
 				if (n == _size)
 					return;
 				if (n > _capacity)
-					this->re_allocate(n, val, 2 * _capacity);
+					this->re_allocate(val, 2 * _capacity);
 				_size = n;
+				_begin = _ptr;
 			}
 
 			void	reserve(size_type n) 
@@ -147,7 +173,8 @@ namespace ft {
 				if (n > this->max_size())
 					throw std::exception();
 				if (n > _capacity)
-					this->re_allocate(n, value_type(), n);
+					this->re_allocate(value_type(), n);
+				_begin = _ptr;
 			}
 
 			// modifiers
@@ -171,16 +198,16 @@ namespace ft {
 					*(_ptr + _size) = val;
 				else
 				{
-					this->re_allocate(_size + 1, val, 2 * _capacity);
-					_begin = _ptr;
+					this->re_allocate(val, 2 * _capacity);
+					_alloc.construct(_ptr + _size, val);
 				}
+				_begin = _ptr;
 				_size += 1;
 			}
 
 			void	pop_back() 
 			{
 				_alloc.destroy(_ptr + _size - 1);
-				_alloc.construct(_ptr + _size - 1, value_type());
 				_size -= 1;
 			}
 
@@ -189,14 +216,20 @@ namespace ft {
 				if (n <= 0)
 					return ;
 				pointer tmp = _ptr;
-				size_type pos = position - this->begin(), i = 0, j = pos, z = 0;
-				for (auto i = 0; i < n; i++)
+				size_type pos = position - this->begin(), i = 0, j = pos, z = 0, old_capacity = _capacity;
+				for (auto i = n; i > 0; i--)
 				{
-					if (_size + i + 1 > _capacity)
+					if (_size + i > _capacity)
+					{
 						_capacity *= 2;
+						break ;
+					}
 				}
+				if (_capacity == 0)
+					_capacity = 1;
 				_size += n;
 				_ptr = _alloc.allocate(_capacity);
+				_begin = _ptr;
 				while(i < j)
 				{
 					*(_ptr + i) = *(tmp + i);
@@ -211,15 +244,16 @@ namespace ft {
 				j = _capacity;
 				while (z < j)
 				{
-					if (z < _size)
+					if (z < _size && z < old_capacity)
 						*(_ptr + z) = *(tmp + (z - n));
+					else
+						_alloc.construct(_ptr + z, value_type());
 					if (j > _size)
 						_alloc.construct(_ptr + j - 1, value_type());
 					z++; j--;
 				}
-				_begin = _ptr;
-				_alloc.destroy(tmp);
-				_alloc.deallocate(tmp, _capacity);
+				this->clear(tmp, old_capacity);
+				_alloc.deallocate(tmp, old_capacity);
 			}
 		
 			iterator	insert(iterator position, const value_type& val)
@@ -230,6 +264,7 @@ namespace ft {
 					_capacity *= 2;
 				_size += 1;
 				_ptr = _alloc.allocate(_capacity);
+				_begin = _ptr;
 				while(i < j)
 				{
 					*(_ptr + i) = *(tmp + i);
@@ -246,18 +281,18 @@ namespace ft {
 						_alloc.construct(_ptr + j - 1, value_type());
 					i++; j--;
 				}
-				_begin = _ptr;
-				_alloc.destroy(tmp);
+				this->clear(tmp, old_capacity);
 				_alloc.deallocate(tmp, old_capacity);
 				return iterator(_ptr + pos);
 			}
 
+			
 			template <class InputIterator>
 			void insert (iterator position, InputIterator first, InputIterator last)
 			{
 				size_type n = last - first;
 				pointer tmp = _ptr;
-				size_type pos = position - this->begin(), i = 0, j = pos, z = 0;
+				size_type pos = position - this->begin(), i = 0, j = pos, z = 0, old_capacity = capacity;
 				for (auto i = n; i > 0; i--)
 				{
 					if (_size + i > _capacity)
@@ -268,6 +303,7 @@ namespace ft {
 				}
 				_size += n;
 				_ptr = _alloc.allocate(_capacity);
+				_begin = _ptr;
 				while(i < j)
 				{
 					*(_ptr + i) = *(tmp + i);
@@ -283,15 +319,16 @@ namespace ft {
 				i = pos + z; j = _capacity;
 				while (i < j)
 				{
-					if (z < _size)
+					if (z < _size && z < old_capacity)
 						*(_ptr + z) = *(tmp + (z - n));
+					else
+						_alloc.construct(_ptr + z, value_type());
 					if (j > _size)
 						_alloc.construct(_ptr + j - 1, value_type());
 					z++; j--;
 				}
-				_begin = _ptr;
-				_alloc.destroy(tmp);
-				_alloc.deallocate(tmp, _capacity);
+				this->clear(tmp, old_capacity);
+				_alloc.deallocate(tmp, old_capacity);
 			}
 			// allocator
 			allocator_type get_allocator() const { return _alloc; }
@@ -306,23 +343,31 @@ namespace ft {
 			private:
 
 				//just a helper for rellocating and updating.
-				void	re_allocate(size_type n, const value_type val, size_type new_capacity)
+				void	re_allocate(const value_type val, size_type new_capacity)
 				{
 					pointer tmp = _ptr;
 					_ptr = _alloc.allocate(new_capacity);
-					size_type i = 0, j = n;
-					while (i < new_capacity)
+					size_type i = 0, j = new_capacity;
+					while (i < j)
 					{
 						if (i < _size)
 							*(_ptr + i) = *(tmp + i);
 						if (j > _size)
 							_alloc.construct(_ptr + j - 1, val);
-						i++;
-						j--;
+						i++; j--;
 					}
-					_alloc.destroy(tmp);
+					
+					this->clear(tmp, _capacity);
 					_alloc.deallocate(tmp, _capacity);
 					_capacity = new_capacity;
+				}
+				 
+				void	clear(pointer ptr, size_type capacity)
+				{
+					for (auto i = 0; i < capacity; i++)
+					{
+						_alloc.destroy(ptr + i);
+					}
 				}
 	};
 }
